@@ -19,7 +19,7 @@ Personnellement j'utiliserai la machine ***bouleau10*** pour éxecuter mes VMs
 
 ### Clé SSH de la machine de virtualisation
 Afin de me connecter à la machine de virtualisation je rentre dans un terminal la commande : ```ssh bouleau10.iutinfo.fr ```
-Pour la première connection je dois vérifier les clés SSH données afin de vérifier qu'on se connecte à la bonne machine
+Pour la première connection je dois vérifier les clés SSH données afin de vérifier qu'on se connecte à la bonne machine.
 
 La clé RSA attendue pour la machine ***bouleau10*** est ```SHA256:Tcd6H/GAL04UmfZ8QZnS/6en3jbVozkjdJ9uArAaEpg``` 
 
@@ -81,4 +81,4 @@ Pour l'option 1 :
 Pour l'option 2 : 
 - il faut lancer la VM avec les commandes ```vmiut ``` vues plus haut
 - il faut obtenir l'IP de la VM avec les commandes ```vmiut ``` vues plus haut
-- enfin se connecter en ssh sur l'IP de la VM en tant qu'utilisateur```ssh user@XXX.XXX.XXX.XXX```
+- enfin se connecter en ssh sur l'IP de la VM en tant qu'utilisateur ```ssh user@XXX.XXX.XXX.XXX```
