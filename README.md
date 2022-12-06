@@ -1,3 +1,3 @@
 # SAE S3.03
 
-> Remplir ce README avec vos nom, prénom et groupe
+> Aumasson-Leduc Gabriel et Mattieu Seneschael | Groupe G
