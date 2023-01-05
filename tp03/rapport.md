@@ -84,7 +84,7 @@ Pour définir un shared_secret on va créer un fichier sharedSecret.yaml contena
 
 On utilisera la commande : 
 ```
-register_new_matrix_user -c /chemin/vers/fichier/de/configuration -u <mon_nom_dutilisateur> -p <mon_mot_de_passe> -a
+register_new_matrix_user -c /chemin/vers/fichier/de/configuration -u <mon_nom_dutilisateur> -p <mon_mot_de_passe> -a 
 ```
 Afin de créer un utilisateur qui est également administrateur
 
