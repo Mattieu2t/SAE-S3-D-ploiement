@@ -73,3 +73,12 @@ Pour mettre en place un reverse proxy, il y a Apache et le module *mod_proxy*, N
 Pour Windows, il a IIS, qui dispose aussi d'un module de reverse proxy directement inclus à Windows.
 
 Il existe aussi HAProxy, avec son module *proxy*.
+
+Il y a aussi Squid qui dispose d'un reverse proxy.
+
+## Installation d’un reverse proxy
+
+Pour créer une nouvelle machine, nous pouvons nous aider du rapport du tp01 afin de savoir comment configurer la machine.
+
+### Sur cette nouvelle machine virtuelle, installer un reverse proxy qui écoute sur le port 80 et redirige toutes les requêtes vers le serveur matrix (et donc vers 192.168.194.3 en port 8008).
+
