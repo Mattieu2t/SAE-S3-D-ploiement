@@ -95,4 +95,83 @@ Il faut aller ici :
 
   `sudo nano /etc/apache2/sites-available/element.conf`
 
->On modifie le bloc de configuration 
+>On modifie le bloc de configuration similaire à celui par défault :
+
+```
+  <VirtualHost *:8080>
+      ServerAdmin webmaster@localhost
+      ServerName element
+      ServerAlias www.element
+      DocumentRoot /var/www/element
+      ErrorLog ${APACHE_LOG_DIR}/error.log
+      CustomLog ${APACHE_LOG_DIR}/access.log combined
+  </VirtualHost>
+```
+
+
+>On active le fichier de configuration avec :
+
+  `sudo a2ensite element.conf`
+
+>On déactive le fichier par défault :
+
+  `sudo a2dissite 000-default.conf`
+
+
+##  Se renseigner sur la notion de reverse proxy et trouver quelques logiciels capable d’agir comme tels (au moins 3). Comme précédemment, il s’agit de décider de critères de sélection et d’évaluer les différentes solutions avant de choisir celui que vous utiliserez.
+
+>Un reverse proxy, à l'inverse du proxy, permet aux utilisateux externes d'accèder à une ressource du réseau interne.
+
+>Lors d'une requête, c'est le reverse proxy qui s'occupe de contacter le serveur cible à notre place pour nous retourner la réponse. Le client n'a donc aucune visibilité sur les serveurs cachés derrière le reverse proxy.
+
+>Le reverse proxy est une protection pour les serveurs du réseaux interne.
+
+1. Pour mettre en place un reverse proxy, il y a Apache et le module *mod_proxy*, Ngnix est son module *ngx_http_proxy_module*.
+
+2. Pour Windows, il a **IIS**, qui dispose aussi d'un module de reverse proxy directement inclus à Windows.
+
+3. Il existe aussi HAProxy, avec son module *proxy*.
+
+4. Il y a aussi Squid qui dispose d'un reverse proxy.
+
+5. Nous utiliseront nginx, avec son module *ngx_http_proxy_module*.
+
+## Installation d’un reverse proxy
+
+>Pour créer une nouvelle machine, nous pouvons nous aider du rapport du **tp01** afin de savoir comment configurer la machine.
+
+### Sur cette nouvelle machine virtuelle, installer un reverse proxy qui écoute sur le port 80 et redirige toutes les requêtes vers le serveur matrix (et donc vers 192.168.194.3 en port 8008).
+
+>Pour installer le reverse proxy, il faut installer Nginx comme indiqué plus haut.
+
+>Une fois fait, il faut créer un nouveau fichier de configuration :
+
+`sudo nano /etc/nginx/conf.d/matrix.conf`
+
+```
+location / {
+    proxy_pass http://192.168.194.3:8008;
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection "upgrade";
+}
+```
+
+>Recharger Nginx avec la commande : 
+
+`sudo nginx -s reload`
+
+### Modifier vos paramètres de redirection SSH pour que le serveur matrix ne soit plus accessible directement sur le port 8008 de la machine de virtualisation mais que ça soit le reverse proxy qui soit accessible (sur le port 8080 de la machine de virtualisation).
+
+>Il faut modifier  le .ssh/config de la machine de virtualisation  :
+
+```
+  Host rproxy
+        User user
+        HostName 192.168.194.4
+        ForwardAgent yes
+        LocalForward 0.0.0.0:9090 localhost:8
+```
