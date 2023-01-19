@@ -9,20 +9,6 @@ date: 2023-01-4
 
 ## Migration vers l’architecture finale
 
-### Description de l’architecture finale :
-
-> Pour toutes les machines virtuelles, vous devez appliquer les configurations minimales suivantes :
-
-1. proxy http,
-
-2. synchronisation du temps avec NTP,
-
-3. déploiement de vos clés SSH,
-
-4. configuration correcte de sudo,
-
-5. configuration correcte du nom d’hôte et du fichier de résolution DNS local : toutes les machines doivent pouvoir connaître l’adresse de toutes les autres à partir de leur nom ;
-
 >Pour supprimer la machine **matrix** :
 
 `vmiut supprimer matrix`
@@ -156,3 +142,72 @@ User user
 LocalForward 0.0.0.0:9090 localhost:80
 #LocalForward 0.0.0.0:9090 localhost:8008
 ```
+
+>Il reste quelques modifications à effectuer pour que Synapse et Element fonctionne sur les URL http://virtu.iutinfo.fr:9090/ & http://virtu.iut-infobio.priv.univ-lille1.fr:9090/.
+
+>Il faut se connecter à la machine rproxy
+
+`ssh rproxy`
+
+>En étant root, il faut modifier le fichier : 
+
+`nano /etc/nginx/sites-available/default`
+
+>Changer par : 
+```
+server {
+        listen 80;
+        listen [::]:80;
+
+        server_name frene14.iutinfo.fr;
+
+        location / {
+                proxy_pass http://192.168.194.3:9090;
+        }
+}
+
+server {
+        listen 80;
+        listen [::]:80;
+
+        server_name frene14.iut-infobio.priv.univ-lille1.fr;
+
+        location / {
+                proxy_pass http://192.168.194.5:80;
+        }
+}
+```
+
+>Sur la machine **matrix**, toujours en root :
+
+`nano /etc/matrix-synapse/homeserver.yaml`
+
+>Remplacer :
+
+```
+listeners:
+  - port: 8080
+    tls: false
+    type: http
+    x_forwarded: true
+    bind_addresses: ['::1', '127.0.0.1']
+    resources:
+      - names: [client, federation]
+        compress: false
+```
+
+>Par :
+
+```
+listeners:
+  - port: 9090
+    tls: false
+    type: http
+    x_forwarded: true
+    bind_addresses: ['::1', '127.0.0.1', '192.168.194.3']
+    resources:
+      - names: [client, federation]
+        compress: false
+```
+
+>Une fois ceci fait, tout est opérationnel !
