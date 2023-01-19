@@ -120,3 +120,39 @@ date: 2023-01-4
 
 `sudo systemctl restart systemd-timesyncd.service`
 
+
+>Installation et configuration de la commande sudo :
+
+`apt install sudo `
+
+`usermod -G sudo user`
+
+Pour supprimer un user --> `sudo passwd -l NOM_USER puis sudo userdel NOM_USER`
+
+Pour voir les user --> `nano /etc/passwd`
+
+Pour voir les groupes --> `nano /etc/group`
+
+>Installation de Synapse (en root) :
+
+`apt install -y lsb-release wget apt-transport-https`
+
+`wget -O /usr/share/keyrings/matrix-org-archive-keyring.gpg https://packages.matrix.org/debian/matrix-org-archive-keyring.gpg`
+
+`echo "deb [signed-by=/usr/share/keyrings/matrix-org-archive-keyring.gpg] https://packages.matrix.org/debian/ $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/matrix-org.list`
+
+`apt update`
+
+`apt install matrix-synapse-py3`
+
+>Au moment de l’installation, le gestionnaire de paquets demande le nom de l'instance. Il faut indiquer frene14.iutinfo.fr:9090.
+
+>Pour que le reverse proxy soit accessible via la machine de virtualisation sur le port 9090, il faut rajouter cette configuration dans le fichier ssh : 
+
+```
+Host vmElement
+HostName 192.168.194.4
+User user
+LocalForward 0.0.0.0:9090 localhost:80
+#LocalForward 0.0.0.0:9090 localhost:8008
+```
