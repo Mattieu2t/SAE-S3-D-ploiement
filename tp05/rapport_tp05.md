@@ -211,3 +211,12 @@ listeners:
 ```
 
 >Une fois ceci fait, tout est opérationnel !
+
+## Acces à la base de données
+
+Afin d'accéder à la base de données sur la machine nommée "db" depuis la machine "matrix" il faut configurer la première. 
+On modifiera le fichier  ```/etc/postgresql/13/main/pg_hba.conf``` dans le cas d'un serveur PostgreSQL en version 13.
+
+On y ajoutera la ligne suivante  
+```host          <database>  <user>  <address>     md5```
+en remplacant le champ address par l'ip ou le hostname de la machine qui doit accéder à la base de données.
