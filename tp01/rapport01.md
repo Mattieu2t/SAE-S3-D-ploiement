@@ -79,8 +79,8 @@ Pour l'option 1 :
 - lancer la commande ```vmiut console <nomDeLaVM>```
 
 Pour l'option 2 : 
-- il faut lancer la VM avec les commandes ```vmiut ``` vues plus haut
-- il faut obtenir l'IP de la VM avec les commandes ```vmiut ``` vues plus haut
+- il faut lancer la VM avec les commandes ```vmiut``` vues plus haut
+- il faut obtenir l'IP de la VM avec les commandes ```vmiut``` vues plus haut
 - enfin se connecter en ssh sur l'IP de la VM en tant qu'utilisateur ```ssh user@XXX.XXX.XXX.XXX```
 
 ## Configuration de la première machine virtuelle
@@ -93,36 +93,36 @@ Pour changer le routeur par défaut  il faut modifier le fichier */etc/resolve.c
 
 #### Changer l'adresse IP de la VM
 Pour changer l'addresse IP il faut
-- couper l'interface réseau enp0s3 ```root@matrix:~# ìfdown enp0s3```
-- ouvrir le fichier */etc/newtork/intefaces*
+- couper l'interface réseau enp0s3 ```root@matrix:~# ifdown enp0s3```
+- ouvrir le fichier */etc/newtork/intefaces* en tant que ***ROOT***
 - remplacer les lignes du  bloc concernant enp0s3 par ```
-    address 192.168.194.3
-    netmask 255.255.255.0
-    gateway 192.168.194.2``` en mettant l'ip voulue, le masque voulu et la gateway voulue
+    address 192.168.194.3  
+    netmask 255.255.255.0  
+    gateway 192.168.194.2  ``` en mettant l'ip voulue, le masque voulu et la gateway voulue
 - relancer l'interface réseau enp0s3 ```root@matrix:~# ifup enp0s3```
 - redemarrer la VM pour vérifier que la config est bien prise en compte ``` root@matrix:~# reboot ```
 et arpès rédemarrage ``` root@matrix:~# ip a ``` ou l'interface enp0s3 devrait avoir pris les modifications faites
 
 
 ### Accès root à la machine
-On ne peut pas se connecter directement en tant que root à la VM par le SSh. Cette connexion a été bloquée. Il faut donc se connecter par le compte user et utiliser la commande ```user@matrix:~$ su -l``` qui permet de charger les variable d'nevironnement du root tout en devenant root
+On ne peut pas se connecter directement en tant que root à la VM par le SSh. Cette connexion a été bloquée. Il faut donc se connecter par le compte user et utiliser la commande ```user@matrix:~$ su -l``` qui permet de charger les variable d'environnement du root tout en devenant root
 
 
 ### Configuration du proxy
-En tant u que **root** modifier le fichier /etc/environment et y ajouter ceci ```HTTP_PROXY=http://cache.univ-lille.fr:3128
+En tant que **root** modifier le fichier /etc/environment et y ajouter ceci ```HTTP_PROXY=http://cache.univ-lille.fr:3128
 HTTPS_PROXY=http://cache.univ-lille.fr:3128
 http_proxy=http://cache.univ-lille.fr:3128
 https_proxy=http://cache.univ-lille.fr:3128
 NO_PROXY=localhost,192.168.194.0/24,172.18.48.0/22```
 
 Cela permettra que la VM utilise le proxy de l'université
-pour verifier le bon fonctionnement ``` root@matrix:~# apt update && apt upgrade ``` (ces commenandes permettent aussi de mettre à jour le serveur)
+pour verifier le bon fonctionnement ``` root@matrix:~# apt update && apt upgrade ``` (ces commandes permettent aussi de mettre à jour le serveur)
 Si cela fonctionne alors le proxy est correctement configuré
 
 
 ### Installation d'outils
 Utiliser la commande ``` root@matrix:~# apt install <package> ``` pour installer les packages voulus. Donc pour installer les packages vim less et rsync on fera 
-``` root@matrix:~# apt install less vim rsync ```
+``` root@matrix:~# apt install -y less vim rsync ```
 
 
 ## Configuration ssh rapide
@@ -136,9 +136,9 @@ afin de créer un alias on ajoutera dans le fichier
 ```
 
 si on veut utliser une clé ajouter en dessous 
-    ```IdentityFile ~/.ssh/key2.pub```
+    ```IdentityFile ~/.ssh/<OnePublicKey.pub>```
     
-si on veut transférer sa clé pour faire plusieurs saut 
+si on veut transférer sa clé pour faire plusieurs connexion d'affilée en SSH 
     ```ForwardAgent yes```
 
 si on veut directement se connecter sans préciser le nom d'utilisateur à chaque fois ajouter : 
