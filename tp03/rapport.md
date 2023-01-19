@@ -1,7 +1,7 @@
 ---
-title: Rapport du TP-01 de la SAE 3.02
+title: Rapport du TP-03 de la SAE 3.02
 author: Gabriel Aumasson-Leduc
-description: Procédures du TP01
+description: Procédures du TP03
 date: 2022-11-22
 ---
 
@@ -10,12 +10,12 @@ date: 2022-11-22
 ## Accès à un service HTTP sur la VM
 
 ### Un premier service pour tester
-Installation de NGONX et Curl : ```root@vm:~#: apt install curl nginx```
+Installation de NGINX et Curl : ```root@vm:~#: apt install curl nginx```
 Verification que NGINX est installé ```root@vm:~#: systemctl status nginx```
 
 Verifcations que le service NGINX est fonctionnel : ```user@vm:~$ curl http://localhost```
 Pour le moment on ne peut pas accéder au serveur Web NGINX depuis la machine de virtualisation (*qui est bouleau10 dans mon cas*)
-Pour faire cet accès on peut utiliser la commande```user@virtu:~$ curl --noproxy '*' http://192.168.194.3/``` ce qui permet de récuperer la page sans passer par le proxy de l'université de Lile (ce dernier n'a pas connaissances des VMs)
+Pour faire cet accès on peut utiliser la commande```user@virtu:~$ curl --noproxy '*' http://192.168.194.3/``` ce qui permet de récuperer la page sans passer par le proxy de l'université de Lille (ce dernier n'a pas connaissances des VMs)
 
 ### Accès au service depuis la machine physique
 On ne peut pas accéder directement au service par défaut car la VM est "separée" du réseau des machines de l'IUT. Pour y accéder depuis n'importe quelle machine, il faudrait faire une redirection entre l'interface de la VM et celle des PC de l'IUT (donc entre la VM et les machines de virtualisations)
@@ -33,12 +33,12 @@ Dans le deuxième cas on modifiera le fichier de configuration SSH en y ajoutant
 ### Installation de synapse sous Debian
 Pour installer le serveur Synapse on suit la documentation officielle en installant la dernière release
 ```
-user@vm:~$ sudo apt install -y lsb-release wget apt-transport-https
-sudo wget -O /usr/share/keyrings/matrix-org-archive-keyring.gpg https://packages.matrix.org/debian/matrix-org-archive-keyring.gpg
+root@vm:~#  apt install -y lsb-release wget apt-transport-https
+ wget -O /usr/share/keyrings/matrix-org-archive-keyring.gpg https://packages.matrix.org/debian/matrix-org-archive-keyring.gpg
 echo "deb [signed-by=/usr/share/keyrings/matrix-org-archive-keyring.gpg] https://packages.matrix.org/debian/ $(lsb_release -cs) main" |
-    sudo tee /etc/apt/sources.list.d/matrix-org.list
-sudo apt update
-sudo apt install matrix-synapse-py3 
+     tee /etc/apt/sources.list.d/matrix-org.list
+ apt update
+ apt install matrix-synapse-py3 
 ``` 
 
 Pour le nom d'instance on choisira bien bouleau10.iutinfo.fr:8008
@@ -61,7 +61,7 @@ name: psycopg2
     cp_min: 5
     cp_max: 10
 ``` 
-On remplacera le user par le nom d'utilisateur choisi, de même pour le mot de passe et la database, enfin on mettra l'adresse ipV4 du host. Le port 5432 est celui utilisé par défaut pour PostgreSQL, s'il a été modifié faites en de même dans ce fichier. Sauvegardez le fichier et le quitter. 
+On remplacera le user par le nom d'utilisateur choisi, de même pour le mot de passe et la database, enfin on mettra l'adresse ipV4 du host ou son nom s'il est renseigné dans le fichier ```/etc/hosts```. Le port 5432 est celui utilisé par défaut pour PostgreSQL, s'il a été modifié faites en de même dans ce fichier. Sauvegardez le fichier et le quitter. 
 
 Nous allons également créer un utilisateur, un mot de passe et une databse spécifique à l'utilisation du serveur Synapse
 Pour cela passer sous l'utilisateur *"postgres"*. 
@@ -80,7 +80,7 @@ root@vm:~# systemctl restart matrix-synapse
 
 ### Creation d'utilisateur matrix
 
-Pour définir un shared_secret on va créer un fichier sharedSecret.yaml contenant "registration_shared_secret: "ma_cle_partagee"" dans le dossier /etc/matrix-synapse
+Pour définir un shared_secret on va créer un fichier sharedSecret.yaml contenant "registration_shared_secret: "ma_cle_partagee"" dans le dossier ```/etc/matrix-synapse```
 
 On utilisera la commande : 
 ```
@@ -96,4 +96,4 @@ enable_registration: True
 enable_registration_without_verification: True
 ```
 
-Redémarrez à nouveau le service pour valider la configutration
+Redémarrez à nouveau le service pour valider la configuration
